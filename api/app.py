@@ -2,12 +2,17 @@ import logging
 
 import flask
 import pathlib
+from flask import Response
 
 import python_avatars as pa
+
+from prometheus_client import Counter, generate_latest, start_http_server
 
 logging.getLogger('werkzeug').setLevel(logging.WARN)
 
 app = flask.Flask("avatars-api")
+
+REQUEST_COUNT = Counter('request_count', 'Total number of HTTP requests')
 
 part_groups = {
     'facial_features': ['eyebrows', 'eyes', 'mouth', 'skin_color'],
@@ -32,6 +37,7 @@ part_mapping = {
 docker_blue = '#086DD7'
 tilt_green = '#20BA31'
 
+
 @app.before_first_request
 def initialize():
     try:
@@ -46,6 +52,7 @@ def initialize():
 
 @app.route('/api/avatar')
 def avatar():
+    REQUEST_COUNT.inc(1)
     params = dict(flask.request.args)
     for p in params:
         if p not in part_mapping:
@@ -79,6 +86,7 @@ def avatar():
 
 @app.route('/api/avatar/spec')
 def avatar_spec():
+    REQUEST_COUNT.inc(1)
     resp = {
         'parts': part_mapping,
         'groups': part_groups,
@@ -104,4 +112,13 @@ def avatar_spec():
 
 @app.route('/ready')
 def ready():
+    REQUEST_COUNT.inc(1)
     return flask.Response('', status=204)
+
+
+@app.route('/metrics')
+def metrics():
+    return Response(generate_latest(), mimetype='text/plain')
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
