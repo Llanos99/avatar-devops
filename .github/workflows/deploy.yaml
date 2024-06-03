@@ -35,9 +35,9 @@ jobs:
         echo "Frontend image tag: ${{ env.FRONTEND_IMAGE_TAG }}"
         echo "Nginx image tag: ${{ env.NGINX_IMAGE_TAG }}"
 
-        cd api && docker buildx build --platform linux/amd64 -t ${{ env.BACKEND_IMAGE_TAG }} -f Dockerfile . --push
-        cd ../web && docker buildx build --platform linux/amd64 -t ${{ env.FRONTEND_IMAGE_TAG }} -f Dockerfile . --push
-        docker buildx build --platform linux/amd64 -t ${{ env.NGINX_IMAGE_TAG }} -f web/Dockerfile.nginx . --push
+        docker buildx build --platform linux/amd64 -t ${{ env.BACKEND_IMAGE_TAG }} -f api/Dockerfile api/ --push
+        docker buildx build --platform linux/amd64 -t ${{ env.FRONTEND_IMAGE_TAG }} -f web/Dockerfile web/ --push
+        docker buildx build --platform linux/amd64 -t ${{ env.NGINX_IMAGE_TAG }} -f web/Dockerfile.nginx web/ --push
 
     - name: Deploy to GKE
       run: |
@@ -45,4 +45,5 @@ jobs:
         kubectl set image deployment/backend backend=${{ env.BACKEND_IMAGE_TAG }}
         kubectl set image deployment/frontend frontend=${{ env.FRONTEND_IMAGE_TAG }}
         kubectl set image deployment/nginx frontend=${{ env.NGINX_IMAGE_TAG }}
+
 
