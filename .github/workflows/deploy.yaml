@@ -47,10 +47,11 @@ jobs:
       run: |
         sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
-    - name: Initialize gcloud CLI
+    - name: Configure gcloud
       run: |
-        gcloud init --quiet
         gcloud config set project ${{ secrets.GCLOUD_PROJECT }}
+        gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_SERVICE_KEY }}
+
 
     - name: Configure docker to use Artifact Registry
       run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
