@@ -11,6 +11,7 @@ on:
       - prod
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
@@ -30,9 +31,9 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ env.BACKEND_IMAGE_URL }}:${GITHUB_SHA} -f Dockerfile .
-        docker build -t ${{ env.FRONTEND_IMAGE_URL }}:${GITHUB_SHA} -f web/Dockerfile .
-        docker build -t ${{ env.NGINX_IMAGE_URL }}:${GITHUB_SHA} -f web/Dockefile.nginx .
+        docker build --tag ${{ env.BACKEND_IMAGE_URL }}:${GITHUB_SHA} -f api/Dockerfile .
+        docker build --tag ${{ env.FRONTEND_IMAGE_URL }}:${GITHUB_SHA} -f web/Dockerfile .
+        docker build --tag ${{ env.NGINX_IMAGE_URL }}:${GITHUB_SHA} -f web/Dockefile.nginx .
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}
