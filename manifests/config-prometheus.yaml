@@ -24,4 +24,4 @@ data:
             regex: metrics
       - job_name: 'backend'
         static_configs:
-          - targets: ['backend:5000']
+          - targets: ['10.112.0.11:5000']
