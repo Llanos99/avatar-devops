@@ -62,8 +62,8 @@ jobs:
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
-        kubectl set image deployment/backend backend=${{ secrets.BACKEND_IMAGE_TAG }}
-        : # kubectl set image deployment/frontend frontend=${{ secrets.FRONTEND_IMAGE_TAG }}
-        : # kubectl set image deployment/nginx nginx=${{ secrets.NGINX_IMAGE_TAG }}
+        kubectl set image deployment/backend-deployment backend-deployment=${{ secrets.BACKEND_IMAGE_TAG }}
+        : # kubectl set image deployment/frontend-deployment frontend-deployment=${{ secrets.FRONTEND_IMAGE_TAG }}
+        : # kubectl set image deployment/nginx-deployment nginx-deployment=${{ secrets.NGINX_IMAGE_TAG }}
 
 
