@@ -32,7 +32,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        cat ${{ env.BACKEND_IMAGE_TAG }}
+        echo "BACKEND_IMAGE_TAG=${{ env.BACKEND_IMAGE_TAG }}"
         cd api/ && docker build -t ${{ env.BACKEND_IMAGE_TAG }}:${GITHUB_SHA} .
         cd ../web/ && docker build -t ${{ env.FRONTEND_IMAGE_TAG }}:${GITHUB_SHA} -f Dockerfile .
         docker build -t ${{ env.NGINX_IMAGE_TAG }}:${GITHUB_SHA} -f Dockerfile.nginx .
