@@ -23,12 +23,5 @@ data:
             action: keep
             regex: metrics
       - job_name: 'backend'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_service_label_app]
-            action: keep
-            regex: backend
-          - source_labels: [__meta_kubernetes_endpoint_port_name]
-            action: keep
-            regex: http
+        static_configs:
+          - targets: ['backend:5000']

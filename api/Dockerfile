@@ -1,10 +1,10 @@
-FROM python:3.10-slim
+FROM python:3.10-alpine
 
 WORKDIR /app
 
 COPY requirements.txt .
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl
+RUN apk update && apk add --no-cache curl
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
