@@ -31,22 +31,24 @@ jobs:
     - name: Build and push Docker images
       run: |
         cd api/ && docker build -t ${{ secrets.BACKEND_IMAGE_URL }}:${GITHUB_SHA} .
-        cd ../web/ && docker build -t ${{ secrets.FRONTEND_IMAGE_URL }}:${GITHUB_SHA} -f Dockerfile .
-        docker build -t ${{ secrets.NGINX_IMAGE_URL }}:${GITHUB_SHA} -f Dockerfile.nginx .
-        docker push ${{ secrets.BACKEND_IMAGE_URL }}:${GITHUB_SHA}
-        docker push ${{ secrets.FRONTEND_IMAGE_URL }}:${GITHUB_SHA}
-        docker push ${{ secrets.NGINX_IMAGE_URL }}:${GITHUB_SHA}
+        : # cd ../web/ && docker build -t ${{ secrets.FRONTEND_IMAGE_URL }}:${GITHUB_SHA} -f Dockerfile .
+        : # docker build -t ${{ secrets.NGINX_IMAGE_URL }}:${GITHUB_SHA} -f Dockerfile.nginx .
+         docker push ${{ secrets.BACKEND_IMAGE_URL }}:${GITHUB_SHA}
+        : # docker push ${{ secrets.FRONTEND_IMAGE_URL }}:${GITHUB_SHA}
+        : # docker push ${{ secrets.NGINX_IMAGE_URL }}:${GITHUB_SHA}
 
     - name: Install GKE auth plugin
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+      uses: imjasonh/gke-auth@v0.1.0
+      with:
+        project: ${{ secrets.GCLOUD_PROJECT }}
+        location: ${{ secrets.GKE_ZONE }}
+        cluster: ${{ secrets.GKE_CLUSTER }}
 
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
         kubectl set image deployment/backend backend=${{ secrets.BACKEND_IMAGE_TAG }}
-        kubectl set image deployment/frontend frontend=${{ secrets.FRONTEND_IMAGE_TAG }}
-        kubectl set image deployment/nginx nginx=${{ secrets.NGINX_IMAGE_TAG }}
+        : # kubectl set image deployment/frontend frontend=${{ secrets.FRONTEND_IMAGE_TAG }}
+        : # kubectl set image deployment/nginx nginx=${{ secrets.NGINX_IMAGE_TAG }}
 
 
