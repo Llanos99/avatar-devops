@@ -1,3 +1,10 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - prod
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,3 +49,4 @@ jobs:
         kubectl set image deployment/backend backend=${{ env.BACKEND_IMAGE_TAG }}
         kubectl set image deployment/frontend frontend=${{ env.FRONTEND_IMAGE_TAG }}
         kubectl set image deployment/nginx frontend=${{ env.NGINX_IMAGE_TAG }}
+
