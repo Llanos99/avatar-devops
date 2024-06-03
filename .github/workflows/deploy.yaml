@@ -47,6 +47,6 @@ jobs:
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
         kubectl set image deployment/backend backend=${{ secrets.BACKEND_IMAGE_TAG }}
         kubectl set image deployment/frontend frontend=${{ secrets.FRONTEND_IMAGE_TAG }}
-        kubectl set image deployment/nginx frontend=${{ secrets.NGINX_IMAGE_TAG }}
+        kubectl set image deployment/nginx nginx=${{ secrets.NGINX_IMAGE_TAG }}
 
 
