@@ -22,7 +22,7 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 9090
+          - containerPort: 9090
         volumeMounts:
         - name: config-volume
           mountPath: /etc/prometheus
@@ -30,3 +30,5 @@ spec:
       - name: config-volume
         configMap:
           name: prometheus-config
+      imagePullSecrets:
+        - name: artifact-registry-secret

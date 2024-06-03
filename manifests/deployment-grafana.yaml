@@ -24,3 +24,5 @@ spec:
         env:
           - name: GF_SECURITY_ADMIN_PASSWORD
             value: "admin"
+      imagePullSecrets:
+        - name: artifact-registry-secret

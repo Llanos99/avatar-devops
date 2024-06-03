@@ -26,3 +26,5 @@ spec:
         env:
           - name: FLASK_ENV
             value: "production"
+      imagePullSecrets:
+        - name: artifact-registry-secret

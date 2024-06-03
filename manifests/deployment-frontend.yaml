@@ -26,3 +26,5 @@ spec:
         env:
           - name: VITE_API_URL
             value: "http://backend:5000"
+      imagePullSecrets:
+        - name: artifact-registry-secret
