@@ -1,7 +1,7 @@
 name: CI/CD Pipeline
 
 env:
-  DOCKER_IMAGE_URL: ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/
+  DOCKER_IMAGE_URL: "${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images"
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        cd api/ && docker build -t avatar-backend:${GITHUB_SHA} .
+        cd api/ && docker build -t ${{ env.DOCKER_IMAGE_URL }}/avatar-backend:${GITHUB_SHA} .
         cd ../web/ && docker build -t avatar-frontend:${GITHUB_SHA} -f Dockerfile .
         docker build -t avatar-nginx:${GITHUB_SHA} -f Dockerfile.nginx .
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}
