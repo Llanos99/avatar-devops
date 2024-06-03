@@ -13,17 +13,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
-      with:
-        project_id: ${{ secrets.GCLOUD_PROJECT }}
-        export_default_credentials: true
     
     - name: Install dependencies
       run: |
@@ -51,6 +40,17 @@ jobs:
       run: |
         gcloud config set project ${{ secrets.GCLOUD_PROJECT }}
         : # gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_SERVICE_KEY }}
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCLOUD_PROJECT }}
+        export_default_credentials: true
 
     - name: Configure docker to use Artifact Registry
       run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
