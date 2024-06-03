@@ -13,6 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set vars
+      run: echo "BACKEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}" >> $GITHUB_ENV
+
+    - name: Set vars
+      run: echo "FRONTEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}" >> $GITHUB_ENV
+
+    - name: Set vars
+      run: echo "NGINX_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}" >> $GITHUB_ENV
+
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
@@ -29,7 +38,7 @@ jobs:
         context: ./api
         file: Dockerfile
         push: true
-        tags: ${GITHUB_SHA}
+        tags: ${{ env.BACKEND_IMAGE_TAG }}
     
     - name: Build and push frontend
       uses: docker/build-push-action@v5
@@ -37,7 +46,7 @@ jobs:
         context: ./web
         file: Dockerfile
         push: true
-        tags: ${GITHUB_SHA}
+        tags: ${{ env.FRONTEND_IMAGE_TAG }}
 
     - name: Build and push nginx
       uses: docker/build-push-action@v5
@@ -45,7 +54,7 @@ jobs:
         context: ./web
         file: Dockerfile.nginx
         push: true
-        tags: ${GITHUB_SHA}
+        tags: ${{ env.NGINX_IMAGE_TAG }}
 
     - name: Deploy to GKE
       run: |
