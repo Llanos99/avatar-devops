@@ -18,9 +18,12 @@ spec:
       - name: backend
         image: aeternal99/avatar-backend:v1
         resources:
+          requests:
+            memory: "32Mi"
+            cpu: "125m"
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "250m"
         ports:
         - containerPort: 5000
         env:

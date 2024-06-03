@@ -16,9 +16,12 @@ spec:
       - name: grafana
         image: grafana/grafana:11.0.0
         resources:
+          requests:
+            memory: "64Mi"
+            cpu: "125m"
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "250m"
         ports:
         - containerPort: 3000
         env:

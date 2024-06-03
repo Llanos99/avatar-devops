@@ -18,9 +18,12 @@ spec:
       - name: frontend
         image: aeternal99/avatar-frontend:v1
         resources:
+          requests:
+            memory: "32Mi"
+            cpu: "125m"
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "250m"
         ports:
         - containerPort: 5173
         env:
