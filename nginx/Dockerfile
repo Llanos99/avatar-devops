@@ -2,7 +2,7 @@ FROM node:18 as build
 
 WORKDIR /app
 
-COPY ../web/package*.json ./
+COPY package*.json ./
 RUN npm install
 
 COPY . .
