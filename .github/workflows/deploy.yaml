@@ -50,7 +50,7 @@ jobs:
     - name: Configure gcloud
       run: |
         gcloud config set project ${{ secrets.GCLOUD_PROJECT }}
-        gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_SERVICE_KEY }}
+        : # gcloud auth activate-service-account --key-file=${{ secrets.GCLOUD_SERVICE_KEY }}
 
     - name: Configure docker to use Artifact Registry
       run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
