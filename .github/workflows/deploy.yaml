@@ -26,12 +26,12 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        cd api/ && docker build -t ${{secrets.BACKEND_IMAGE_URL}}:${ GITHUB_SHA } .
-        cd ../web/ && docker build -t ${{secrets.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile .
-        docker build -t ${{secrets.NGINX_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile.nginx .
-        docker push ${{secrets.BACKEND_IMAGE_URL}}:${ GITHUB_SHA }
-        docker push ${{secrets.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA }
-        docker push ${{secrets.NGINX_IMAGE_URL}}:${ GITHUB_SHA }
+        cd api/ && docker build -t ${{ secrets.BACKEND_IMAGE_URL }}:${ GITHUB_SHA } .
+        cd ../web/ && docker build -t ${{ secrets.FRONTEND_IMAGE_URL }}:${ GITHUB_SHA } -f Dockerfile .
+        docker build -t ${{ secrets.NGINX_IMAGE_URL }}:${ GITHUB_SHA } -f Dockerfile.nginx .
+        docker push ${{ secrets.BACKEND_IMAGE_URL }}:${ GITHUB_SHA }
+        docker push ${{ secrets.FRONTEND_IMAGE_URL }}:${ GITHUB_SHA }
+        docker push ${{ secrets.NGINX_IMAGE_URL }}:${ GITHUB_SHA }
 
     - name: Deploy to GKE
       run: |
