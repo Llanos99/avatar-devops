@@ -29,9 +29,9 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        cd api/ && docker build -t ${{ env.DOCKER_IMAGE_URL }}/avatar-backend:${GITHUB_SHA} .
-        cd ../web/ && docker build -t ${{ env.DOCKER_IMAGE_URL }}/avatar-frontend:${GITHUB_SHA} -f Dockerfile .
-        docker build -t ${{ env.DOCKER_IMAGE_URL }}/avatar-nginx:${GITHUB_SHA} -f Dockefile.nginx .
+        cd api/ && docker build -t avatar-backend:${GITHUB_SHA} .
+        cd ../web/ && docker build -t avatar-frontend:${GITHUB_SHA} -f Dockerfile .
+        docker build -t avatar-nginx:${GITHUB_SHA} -f Dockefile.nginx .
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}
