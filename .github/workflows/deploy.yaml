@@ -25,18 +25,18 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        cd api/ && docker build -t ${{env.BACKEND_IMAGE_URL}}:${ GITHUB_SHA } .
-        cd ../web/ && docker build -t ${{env.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile .
-        docker build -t ${{env.NGINX_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile.nginx .
-        docker push ${{env.BACKEND_IMAGE_URL}}:${ GITHUB_SHA }
-        docker push ${{env.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA }
-        docker push ${{env.NGINX_IMAGE_URL}}:${ GITHUB_SHA }
+        cd api/ && docker build -t ${{secrets.BACKEND_IMAGE_URL}}:${ GITHUB_SHA } .
+        cd ../web/ && docker build -t ${{secrets.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile .
+        docker build -t ${{secrets.NGINX_IMAGE_URL}}:${ GITHUB_SHA } -f Dockerfile.nginx .
+        docker push ${{secrets.BACKEND_IMAGE_URL}}:${ GITHUB_SHA }
+        docker push ${{secrets.FRONTEND_IMAGE_URL}}:${ GITHUB_SHA }
+        docker push ${{secrets.NGINX_IMAGE_URL}}:${ GITHUB_SHA }
 
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
-        kubectl set image deployment/backend backend=${{ env.BACKEND_IMAGE_TAG }}
-        kubectl set image deployment/frontend frontend=${{ env.FRONTEND_IMAGE_TAG }}
-        kubectl set image deployment/nginx frontend=${{ env.NGINX_IMAGE_TAG }}
+        kubectl set image deployment/backend backend=${{ secrets.BACKEND_IMAGE_TAG }}
+        kubectl set image deployment/frontend frontend=${{ secrets.FRONTEND_IMAGE_TAG }}
+        kubectl set image deployment/nginx frontend=${{ secrets.NGINX_IMAGE_TAG }}
 
 
