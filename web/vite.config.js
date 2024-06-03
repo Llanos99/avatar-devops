@@ -15,15 +15,6 @@ export default defineConfig({
     hmr: {
       clientPort: process.env.VITE_CLIENT_PORT || null
     },
-    // Comment the proxy block if you wanna use nginx. This file is for dev use only
-    /*
-    proxy: {
-      '^/api': {
-        target: 'http://backend:5000',
-        changeOrigin: true
-      }
-    }
-    */
   },
   build: {
     outDir: 'dist',
