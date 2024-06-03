@@ -22,3 +22,6 @@ data:
           - source_labels: [__meta_kubernetes_endpoint_port_name]
             action: keep
             regex: metrics
+      - job_name: 'backend'
+        static_configs:
+          - targets: ['backend:5000']
