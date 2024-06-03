@@ -1,10 +1,5 @@
 name: CI/CD Pipeline
 
-env:
-  BACKEND_IMAGE_URL: us-west1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend
-  FRONTEND_IMAGE_URL: us-west1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend
-  NGINX_IMAGE_URL: us-west1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx
-
 on:
   push:
     branches:
@@ -19,6 +14,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set vars
+      run: |
+        echo "BACKEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}" >> $GITHUB_ENV
+        echo "FRONTEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}" >> $GITHUB_ENV
+        echo "NGINX_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}" >> $GITHUB_ENV
+
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
@@ -31,9 +32,9 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        cd api/ && docker build -t us-west1-docker.pkg.dev/opportune-scope-421323/avatar-images/avatar-backend:${GITHUB_SHA} .
-        cd ../web/ && docker build -t us-west1-docker.pkg.dev/opportune-scope-421323/avatar-images/avatar-frontend:${GITHUB_SHA} -f Dockerfile .
-        docker build -t us-west1-docker.pkg.dev/opportune-scope-421323/avatar-images/avatar-nginx:${GITHUB_SHA} -f Dockerfile.nginx .
+        cd api/ && docker build -t ${{ env.BACKEND_IMAGE_TAG }} .
+        cd ../web/ && docker build -t ${{ env.FRONTEND_IMAGE_TAG }} -f Dockerfile .
+        docker build -t ${{ env.NGINX_IMAGE_TAG }} -f Dockerfile.nginx .
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}
         docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}
