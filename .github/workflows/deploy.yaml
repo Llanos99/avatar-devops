@@ -20,7 +20,7 @@ jobs:
         service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
     - name: Configure docker to use Artifact Registry
-      run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
+      run: gcloud auth configure-docker ${GKE_ZONE}-docker.pkg.dev
 
     - name: Build and push Docker image
       run: |
