@@ -23,15 +23,29 @@ jobs:
     - name: Configure docker to use Artifact Registry
       run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
 
-    - name: Build and push Docker image
-      working-directory: ${{ github.workspace }}
-      run: |
-        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA} -f api/Dockerfile api/
-        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA} -f web/Dockerfile web/
-        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA} -f web/Dockefile.nginx web/
-        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:${GITHUB_SHA}
-        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:${GITHUB_SHA}
-        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:${GITHUB_SHA}
+    - name: Build and push backend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./api
+        file: Dockerfile
+        push: true
+        tags: ${GITHUB_SHA}
+    
+    - name: Build and push frontend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./web
+        file: Dockerfile
+        push: true
+        tags: ${GITHUB_SHA}
+
+    - name: Build and push nginx
+      uses: docker/build-push-action@v5
+      with:
+        context: ./web
+        file: Dockerfile.nginx
+        push: true
+        tags: ${GITHUB_SHA}
 
     - name: Deploy to GKE
       run: |
