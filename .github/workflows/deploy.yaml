@@ -16,7 +16,7 @@ jobs:
 
     - name: Set vars
       run: |
-        echo "BACKEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend >> $GITHUB_ENV
+        echo "BACKEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend" >> $GITHUB_ENV
         echo "FRONTEND_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend" >> $GITHUB_ENV
         echo "NGINX_IMAGE_TAG=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx" >> $GITHUB_ENV
 
