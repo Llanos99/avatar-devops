@@ -18,22 +18,23 @@ jobs:
       with:
         project_id: ${{ secrets.GCLOUD_PROJECT }}
         service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+        export_deafult_credentias: true
 
     - name: Configure docker to use Artifact Registry
-      run: gcloud auth configure-docker ${GKE_ZONE}-docker.pkg.dev
+      run: gcloud auth configure-docker ${{ secrets.REGION }}-docker.pkg.dev
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA -f api/Dockerfile api/
-        docker build -t ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA -f web/Dockerfile web/
-        docker build -t ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA -f web/Dockefile.nginx web/
-        docker push ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA
-        docker push ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA
-        docker push ${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA
+        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA -f api/Dockerfile api/
+        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA -f web/Dockerfile web/
+        docker build -t ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA -f web/Dockefile.nginx web/
+        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA
+        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA
+        docker push ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA
 
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }}
-        kubectl set image deployment/backend backend=${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA
-        kubectl set image deployment/frontend frontend=${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA
-        kubectl set image deployment/nginx frontend=${REGION}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA
+        kubectl set image deployment/backend backend=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-backend:$GITHUB_SHA
+        kubectl set image deployment/frontend frontend=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-frontend:$GITHUB_SHA
+        kubectl set image deployment/nginx frontend=${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/avatar-images/avatar-nginx:$GITHUB_SHA
