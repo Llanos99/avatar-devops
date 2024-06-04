@@ -41,6 +41,6 @@ Depending on your OS, you can install minikube in order to get a local kubernete
 
 ```
 minikube start --driver=docker
-kubectl apply -f minikube-manifests/
+kubectl apply -f manifests/
 minikube service nginx
 ```
