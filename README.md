@@ -4,7 +4,26 @@ Welcome to my project! This initiative is designed to showcase the entire softwa
 
 # Try it out with docker-compose
 
-After cloning the project, you can launch the application locally by doing a docker-compose build and then a docker-compose up -d. Reading the Dockerfiles gives you an ingisht on the ports that are being used for the different services.
+After cloning the project, you can launch the application locally by doing a
+
+```
+    docker-compose build
+    docker-compose up -d
+```
+
+Reading the Dockerfiles gives you an ingisht on the ports that are being used for the different services.
+
+# Try it out with minikube cluster
+
+Depending on your OS, you can install minikube in order to get a local kubernetes cluster in your machine. After setting up your minikube cluster and kubectl, you can test the application by executing the following command.
+
+```
+    minikube start --driver=docker
+    kubectl apply -f minikube-manifests/
+    minikube service nginx
+```
+
+This last command will create a tunel into your web browser for displaying and connecting the app.
 
 # Diagram
 
